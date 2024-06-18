@@ -123,7 +123,6 @@ function proc_setup_min_surface(world::Box3D, num_procs::Int)
         end
     end
 
-
     @assert prod(best_grid) == num_procs "The product of the best grid dimensions must equal num_procs"
 
     return best_grid
@@ -132,19 +131,24 @@ end
 """
     split_world(world::Box3D, proc_grid::NTuple{3, Int}, remap::Vector{Int}=Int[])
 
-Split the given `world` into subdomains based on the `proc_grid` and `remap` parameters.
+Split the given `world` into subdomains based on the `proc_grid` and `remap`
+parameters.
 
 ## Arguments
 - `world::Box3D`: The 3D box representing the world to be split.
-- `proc_grid::NTuple{3, Int}`: The 3D grid specifying the number of processors in each dimension.
-- `remap::Vector{Int}` (optional): A vector specifying the remapping of subdomains. Default is an empty vector.
+- `proc_grid::NTuple{3, Int}`: The 3D grid specifying the number of processors
+  in each dimension.
+- `remap::Vector{Int}` (optional): A vector specifying the remapping of
+  subdomains. Default is an empty vector.
 
 ## Returns
 - An array of `Box3D` objects representing the subdomains.
 
-The `split_world` function divides the `world` into subdomains based on the number of processors specified by `proc_grid`.
-Each subdomain is represented by a `Box3D` object, which is a 3D box defined by its lower and upper coordinates.
-If the `remap` vector is provided, the function remaps the subdomains according to the indices in the `remap` vector.
+The `split_world` function divides the `world` into subdomains based on the
+number of processors specified by `proc_grid`. Each subdomain is represented by
+a `Box3D` object, which is a 3D box defined by its lower and upper coordinates.
+If the `remap` vector is provided, the function remaps the subdomains according
+to the indices in the `remap` vector.
 
 The function returns an array of `Box3D` objects representing the subdomains.
 """
