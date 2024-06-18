@@ -97,13 +97,6 @@ function proc_setup_min_surface(world::Box3D, num_procs::Int)
 
     best_grid = (1, 1, 1)
 
-    #=
-    function surface(proc_grid)
-        box_size = Tuple(a÷b for (a, b) in zip(all_indexes, proc_grid))
-        return sum(a * b for (a, b) in zip(box_size, (box_size[2], box_size[3], box_size[1])))
-    end
-    =#
-
     function surface(proc_grid)
         box_size = Tuple(a÷b for (a, b) in zip(all_indexes, proc_grid))
         return 2 * (box_size[1]*box_size[2] + box_size[1]*box_size[3] + box_size[2]*box_size[3])
