@@ -127,69 +127,69 @@ function heffte_is_r2c(plan::HefftePlan)
 end
 
 function heffte_forward_s2c(plan::HefftePlan, input::Vector{Float32}, output::Vector{Complex{Float32}}, scale::Integer)
-    @ccall libheffte.heffte_forward_s2c(plan::Ptr{HefftePlan}, input::Ptr{Float32}, output::Ptr{Complex{Float32}}, scale::Cint)::Cint
+    @ccall libheffte.heffte_forward_s2c(plan::Ptr{HefftePlan}, input::Ptr{Float32}, output::Ptr{Complex{Float32}}, scale::Cint)::Cvoid
 end
 
 function heffte_forward_c2c(plan::HefftePlan, input::Vector{Complex{Float32}}, output::Vector{Complex{Float32}}, scale::Integer)
-    @ccall libheffte.heffte_forward_c2c(plan::Ptr{HefftePlan}, input::Ptr{Complex{Float32}}, output::Ptr{Complex{Float32}}, scale::Cint)::Cint
+    @ccall libheffte.heffte_forward_c2c(plan::Ptr{HefftePlan}, input::Ptr{Complex{Float32}}, output::Ptr{Complex{Float32}}, scale::Cint)::Cvoid
 end
 
 function heffte_forward_d2z(plan::HefftePlan, input::Vector{Float64}, output::Vector{Complex{Float64}}, scale::Integer)
-    @ccall libheffte.heffte_forward_d2z(plan::Ptr{HefftePlan}, input::Ptr{Float64}, output::Ptr{Complex{Float64}}, scale::Cint)::Cint
+    @ccall libheffte.heffte_forward_d2z(plan::Ptr{HefftePlan}, input::Ptr{Float64}, output::Ptr{Complex{Float64}}, scale::Cint)::Cvoid
 end
 
 function heffte_forward_z2z(plan::HefftePlan, input::Vector{Complex{Float64}}, output::Vector{Complex{Float64}}, scale::Integer)
-    @ccall libheffte.heffte_forward_z2z(plan::Ptr{HefftePlan}, input::Ptr{Complex{Float64}}, output::Ptr{Complex{Float64}}, scale::Cint)::Cint
+    @ccall libheffte.heffte_forward_z2z(plan::Ptr{HefftePlan}, input::Ptr{Complex{Float64}}, output::Ptr{Complex{Float64}}, scale::Cint)::Cvoid
 end
 
 function heffte_backward_c2s(plan::HefftePlan, input::Vector{Complex{Float32}}, output::Vector{Float32}, scale::Integer)
-    @ccall libheffte.heffte_backward_c2s(plan::Ptr{HefftePlan}, input::Ptr{Complex{Float32}}, output::Ptr{Float32}, scale::Cint)::Cint
+    @ccall libheffte.heffte_backward_c2s(plan::Ptr{HefftePlan}, input::Ptr{Complex{Float32}}, output::Ptr{Float32}, scale::Cint)::Cvoid
 end
 
 function heffte_backward_c2c(plan::HefftePlan, input::Vector{Complex{Float32}}, output::Vector{Complex{Float32}}, scale::Integer)
-    @ccall libheffte.heffte_backward_c2c(plan::Ptr{HefftePlan}, input::Ptr{Complex{Float32}}, output::Ptr{Complex{Float32}}, scale::Cint)::Cint
+    @ccall libheffte.heffte_backward_c2c(plan::Ptr{HefftePlan}, input::Ptr{Complex{Float32}}, output::Ptr{Complex{Float32}}, scale::Cint)::Cvoid
 end
 
 function heffte_backward_z2d(plan::HefftePlan, input::Vector{Complex{Float64}}, output::Vector{Float64}, scale::Integer)
-    @ccall libheffte.heffte_backward_z2d(plan::Ptr{HefftePlan}, input::Ptr{Complex{Float64}}, output::Ptr{Float64}, scale::Cint)::Cint
+    @ccall libheffte.heffte_backward_z2d(plan::Ptr{HefftePlan}, input::Ptr{Complex{Float64}}, output::Ptr{Float64}, scale::Cint)::Cvoid
 end
 
 function heffte_backward_z2z(plan::HefftePlan, input::Vector{Complex{Float64}}, output::Vector{Complex{Float64}}, scale::Integer)
-    @ccall libheffte.heffte_backward_z2z(plan::Ptr{HefftePlan}, input::Ptr{Complex{Float64}}, output::Ptr{Complex{Float64}}, scale::Cint)::Cint
+    @ccall libheffte.heffte_backward_z2z(plan::Ptr{HefftePlan}, input::Ptr{Complex{Float64}}, output::Ptr{Complex{Float64}}, scale::Cint)::Cvoid
 end
 
 # Buffered versions of forward and backward transforms
 
 function heffte_forward_s2c_buffered(plan::HefftePlan, input::Vector{Float32}, output::Vector{Complex{Float32}}, workspace::Vector{Complex{Float32}}, scale::Integer)
-    @ccall libheffte.heffte_forward_s2c_buffered(plan::Ptr{HefftePlan}, input::Ptr{Float32}, output::Ptr{Complex{Float32}}, workspace::Ptr{Complex{Float32}}, scale::Cint)::Cint
+    @ccall libheffte.heffte_forward_s2c_buffered(plan::Ptr{HefftePlan}, input::Ptr{Float32}, output::Ptr{Complex{Float32}}, workspace::Ptr{Complex{Float32}}, scale::Cint)::Cvoid
 end
 
 function heffte_forward_c2c_buffered(plan::HefftePlan, input::Vector{Complex{Float32}}, output::Vector{Complex{Float32}}, workspace::Vector{Complex{Float32}}, scale::Integer)
-    @ccall libheffte.heffte_forward_c2c_buffered(plan::Ptr{HefftePlan}, input::Ptr{Complex{Float32}}, output::Ptr{Complex{Float32}}, workspace::Ptr{Complex{Float32}}, scale::Cint)::Cint
+    @ccall libheffte.heffte_forward_c2c_buffered(plan::Ptr{HefftePlan}, input::Ptr{Complex{Float32}}, output::Ptr{Complex{Float32}}, workspace::Ptr{Complex{Float32}}, scale::Cint)::Cvoid
 end
 
 function heffte_forward_d2z_buffered(plan::HefftePlan, input::Vector{Float64}, output::Vector{Complex{Float64}}, workspace::Vector{Complex{Float64}}, scale::Integer)
-    @ccall libheffte.heffte_forward_d2z_buffered(plan::Ptr{HefftePlan}, input::Ptr{Float64}, output::Ptr{Complex{Float64}}, workspace::Ptr{Complex{Float64}}, scale::Cint)::Cint
+    @ccall libheffte.heffte_forward_d2z_buffered(plan::Ptr{HefftePlan}, input::Ptr{Float64}, output::Ptr{Complex{Float64}}, workspace::Ptr{Complex{Float64}}, scale::Cint)::Cvoid
 end
 
 function heffte_forward_z2z_buffered(plan::HefftePlan, input::Vector{Complex{Float64}}, output::Vector{Complex{Float64}}, workspace::Vector{Complex{Float64}}, scale::Integer)
-    @ccall libheffte.heffte_forward_z2z_buffered(plan::Ptr{HefftePlan}, input::Ptr{Complex{Float64}}, output::Ptr{Complex{Float64}}, workspace::Ptr{Complex{Float64}}, scale::Cint)::Cint
+    @ccall libheffte.heffte_forward_z2z_buffered(plan::Ptr{HefftePlan}, input::Ptr{Complex{Float64}}, output::Ptr{Complex{Float64}}, workspace::Ptr{Complex{Float64}}, scale::Cint)::Cvoid
 end
 
 function heffte_backward_c2s_buffered(plan::HefftePlan, input::Vector{Complex{Float32}}, output::Vector{Float32}, workspace::Vector{Complex{Float32}}, scale::Integer)
-    @ccall libheffte.heffte_backward_c2s_buffered(plan::Ptr{HefftePlan}, input::Ptr{Complex{Float32}}, output::Ptr{Float32}, workspace::Ptr{Complex{Float32}}, scale::Cint)::Cint
+    @ccall libheffte.heffte_backward_c2s_buffered(plan::Ptr{HefftePlan}, input::Ptr{Complex{Float32}}, output::Ptr{Float32}, workspace::Ptr{Complex{Float32}}, scale::Cint)::Cvoid
 end
 
 function heffte_backward_c2c_buffered(plan::HefftePlan, input::Vector{Complex{Float32}}, output::Vector{Complex{Float32}}, workspace::Vector{Complex{Float32}}, scale::Integer)
-    @ccall libheffte.heffte_backward_c2c_buffered(plan::Ptr{HefftePlan}, input::Ptr{Complex{Float32}}, output::Ptr{Complex{Float32}}, workspace::Ptr{Complex{Float32}}, scale::Cint)::Cint
+    @ccall libheffte.heffte_backward_c2c_buffered(plan::Ptr{HefftePlan}, input::Ptr{Complex{Float32}}, output::Ptr{Complex{Float32}}, workspace::Ptr{Complex{Float32}}, scale::Cint)::Cvoid
 end
 
 function heffte_backward_z2d_buffered(plan::HefftePlan, input::Vector{Complex{Float64}}, output::Vector{Float64}, workspace::Vector{Complex{Float64}}, scale::Integer)
-    @ccall libheffte.heffte_backward_z2d_buffered(plan::Ptr{HefftePlan}, input::Ptr{Complex{Float64}}, output::Ptr{Float64}, workspace::Ptr{Complex{Float64}}, scale::Cint)::Cint
+    @ccall libheffte.heffte_backward_z2d_buffered(plan::Ptr{HefftePlan}, input::Ptr{Complex{Float64}}, output::Ptr{Float64}, workspace::Ptr{Complex{Float64}}, scale::Cint)::Cvoid
 end
 
 function heffte_backward_z2z_buffered(plan::HefftePlan, input::Vector{Complex{Float64}}, output::Vector{Complex{Float64}}, workspace::Vector{Complex{Float64}}, scale::Integer)
-    @ccall libheffte.heffte_backward_z2z_buffered(plan::Ptr{HefftePlan}, input::Ptr{Complex{Float64}}, output::Ptr{Complex{Float64}}, workspace::Ptr{Complex{Float64}}, scale::Cint)::Cint
+    @ccall libheffte.heffte_backward_z2z_buffered(plan::Ptr{HefftePlan}, input::Ptr{Complex{Float64}}, output::Ptr{Complex{Float64}}, workspace::Ptr{Complex{Float64}}, scale::Cint)::Cvoid
 end
 
 # export all
