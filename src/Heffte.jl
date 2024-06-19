@@ -1,9 +1,12 @@
 module Heffte
 
+using MPI
 using Base.Iterators: product
 
 include("Preferences.jl")
 include("API.jl")
+
+using .API
 
 """
     struct Box3D
@@ -186,4 +189,119 @@ function split_world(world::Box3D, proc_grid::NTuple{3, Int}, remap::Vector{Int}
     end
 end
 
+function get_backend_type(backend::Symbol)::Int
+    if backend == :STOCK
+        return Heffte_BACKEND_STOCK
+    elseif backend == :FFTW
+        return Heffte_BACKEND_FFTW
+    elseif backend == :MKL
+        return Heffte_BACKEND_MKL
+    elseif backend == :CUDA
+        return Heffte_BACKEND_CUDA
+    elseif backend == :ROCFFT
+        return Heffte_BACKEND_ROCFFT
+    else
+        error("Unknown backend: $backend")
+    end
 end
+
+"""
+    PlanOptions(backend::Symbol)
+
+Return default plan options for backend.
+
+Choices: :STOCK, :FFTW, :MKL, :CUDA, :ROCFFT
+"""
+function PlanOptions(backend::Symbol)
+    options = HefftePlanOptions(0, 0, 0, 0)
+    backend_type = get_backend_type(backend)
+    heffte_set_default_options(backend_type, options)
+    return options
+end
+
+# nice formatted output for PlanOptions
+function Base.show(io::IO, options::HefftePlanOptions)
+    is_reorder = options.use_reorder == 1
+    if options.algorithm == Heffte_RESHAPE_ALGORITHM_ALLTOALLV
+        reshape_algorithm = "alltoallv"
+    elseif options.algorithm == Heffte_RESHAPE_ALGORITHM_P2P_PLINED
+        reshape_algorithm = "point-to-point (pipelined)"
+    elseif options.algorithm == Heffte_RESHAPE_ALGORITHM_P2P
+        reshape_algorithm = "point-to-point"
+    end
+    pencils_or_slabs = options.use_pencils == 1 ? "pencils" : "slabs"
+    is_gpu_aware = options.use_gpu_aware == 1
+
+    println(io, "HefftePlanOptions(")
+    println(io, "    reorder = ", is_reorder)
+    println(io, "    reshape_algorithm = ", reshape_algorithm)
+    println(io, "    pencils / slabs = ", pencils_or_slabs)
+    println(io, "    gpu_aware = ", is_gpu_aware)
+    println(io, "    )")
+end
+
+function Plan(inbox::Box3D, outbox::Box3D, options::HefftePlanOptions; backend=:FFTW, comm=MPI.COMM_WORLD)
+    plan_ref = Ref{Ptr{HefftePlan}}(C_NULL)
+    backend_type = get_backend_type(backend)
+    status = heffte_plan_create(backend_type, collect(inbox.low), collect(inbox.high), nothing,
+                                collect(outbox.low), collect(outbox.high), nothing,
+                                comm, options, plan_ref)
+    if status != Heffte_SUCCESS
+        error("Failed at heffte_plan_create() with error code: $status")
+    end
+    return unsafe_load(plan_ref[])
+end
+
+function get_backend_name(backend::Integer)::Symbol
+    if backend == Heffte_BACKEND_STOCK
+        return :STOCK
+    elseif backend == Heffte_BACKEND_FFTW
+        return :FFTW
+    elseif backend == Heffte_BACKEND_MKL
+        return :MKL
+    elseif backend == Heffte_BACKEND_CUDA
+        return :CUDA
+    elseif backend == Heffte_BACKEND_ROCFFT
+        return :ROCFFT
+    else
+        error("Unknown backend: $backend")
+    end
+end
+
+# nice formatted output for Plan
+function Base.show(io::IO, plan::HefftePlan)
+    backend = get_backend_name(plan.backend_type)
+    using_r2c = plan.using_r2c == 1
+    println(io, "HefftePlan(")
+    println(io, "    backend = ", backend)
+    println(io, "    using_r2c = ", using_r2c)
+    println(io, "    )")
+end
+
+size_inbox(plan::HefftePlan) = heffte_size_inbox(plan)
+size_outbox(plan::HefftePlan) = heffte_size_outbox(plan)
+size_workspace(plan::HefftePlan) = heffte_size_workspace(plan)
+
+function get_scale(scale::Symbol)::Int
+    if scale == :none
+        return Heffte_SCALE_NONE
+    elseif scale == :full
+        return Heffte_SCALE_FULL
+    elseif scale == :symmetric
+        return Heffte_SCALE_SYMMETRIC
+    else
+        error("Unknown scale: $scale")
+    end
+end
+
+function forward!(plan::HefftePlan, input::Vector{Float64}, output::Vector{Complex{Float64}}, workspace::Vector{Complex{Float64}}; scale=:none)
+    heffte_forward_d2z_buffered(plan, input, output, workspace, get_scale(scale))
+    return output
+end
+
+function backward!(plan::HefftePlan, input::Vector{Complex{Float64}}, output::Vector{Float64}, workspace::Vector{Complex{Float64}}; scale=:full)
+    heffte_backward_z2d_buffered(plan, input, output, workspace, get_scale(scale))
+    return output
+end
+
+end # module
