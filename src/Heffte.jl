@@ -2,6 +2,7 @@ module Heffte
 
 using Base.Iterators: product
 
+include("Preferences.jl")
 include("API.jl")
 
 """
