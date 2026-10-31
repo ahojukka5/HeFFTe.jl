@@ -4,30 +4,15 @@ Heffte.API implements the C interface to the HeFFTe library.
 module API
 
 using MPI
-using Libdl
-using ..Heffte.Preferences: heffte_path
+using HeFFTe_jll
 
-function get_libheffte()
-
-    # if heffte_path is not set, give warning and instructions that path should be
-    # set by user in order to make this package work
-    if heffte_path == nothing
-        println("HeFFTe path not set; please set it using `Heffte.Preferences.set_heffte_path(\"path/to/heffte\")`")
-        println("Without settings path, HeFFTe.jl will not work.")
-        println("After settings the path, restart your Julia session for the change to take effect.")
-        return nothing
-    end
-
-    libheffte = joinpath(heffte_path, "lib", "libheffte.so")
-    if !isfile(libheffte)
-        throw(ArgumentError("libheffte.so not found in $(new_path)/lib"))
-    end
-
-    return libheffte
+# HeFFTe_jll v2.4.1+0 defines libheffte on Linux x86_64 and aarch64.
+# Other platforms keep the module loadable until a build provides the library.
+if isdefined(HeFFTe_jll, :libheffte)
+    const libheffte = HeFFTe_jll.libheffte
+else
+    const libheffte = nothing
 end
-
-# Load the HeFFTe shared library
-const libheffte = get_libheffte()
 
 # Define constants from heffte_c_defines.h
 const Heffte_BACKEND_STOCK::Cint = 0

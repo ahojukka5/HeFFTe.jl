@@ -1,10 +1,12 @@
 name = "Heffte"
 uuid = "ecedf294-3751-4b91-89f2-7c98aff6aae3"
-authors = ["Jukka Aho <jukka.aho@vtt.fi>"]
 version = "0.1.0"
+authors = ["Jukka Aho <jukka.aho@vtt.fi>"]
 
 [deps]
-Libdl = "8f399da3-3557-5675-b5ff-fb832c97cbdb"
+HeFFTe_jll = "7b92b817-26b5-541f-8611-85454e06426f"
 MPI = "da04e1cc-30fd-572f-bb4f-1f8673147195"
-Preferences = "21216c6a-2e73-6563-6e65-726566657250"
 Test = "8dfed614-e22c-5e08-85e1-65c5234f0b40"
+
+[compat]
+HeFFTe_jll = "2.4.1"

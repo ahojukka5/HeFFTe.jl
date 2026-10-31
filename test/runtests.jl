@@ -1,5 +1,6 @@
 using Test
 
+using HeFFTe_jll
 using Heffte: Box3D, count, proc_setup_min_surface, split_world
 
 @testset "Heffte Tests" begin
@@ -45,6 +46,14 @@ using Heffte: Box3D, count, proc_setup_min_surface, split_world
             world_box = Box3D((2, 1, 1))
             num_procs = 4
             @test_throws AssertionError proc_setup_min_surface(world_box, num_procs)
+        end
+    end
+
+    @testset "HeFFTe_jll" begin
+        if Sys.islinux() && Sys.ARCH in (:x86_64, :aarch64)
+            @test isdefined(HeFFTe_jll, :libheffte)
+        else
+            @test_skip isdefined(HeFFTe_jll, :libheffte)
         end
     end
 
