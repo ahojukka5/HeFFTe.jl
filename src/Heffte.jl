@@ -3,8 +3,7 @@ module Heffte
 using MPI
 using Base.Iterators: product
 
-include("Preferences.jl")
-include("API.jl")
+include("api.jl")
 
 using .API
 
